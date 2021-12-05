@@ -1,0 +1,268 @@
+/********************************************************
+* Progam name: Assignment_6_Robot_Wars_Levi_McCann.cpp 
+* Created date: 12/3/2021
+* Created by: Levi McCann
+* Purpose: CIS 61 assignment
+* Acknowledgments: Isaiah Whitten, Levi McCann, Stackoverflow.com
+* CIS64 C. Polen, Shasta College, Fall 2021
+*********************************************************/
+
+//include the necessary libraries
+#include <iostream>  //Input output stream
+#include <iomanip>   //Input output manipulation
+#include <string>    //C++ String Library
+#include <ctime>     //c Time
+#include <cstdlib>   // c Standard Library
+using namespace std;
+
+//create a structure type called "robot_stats", to hold roborts data, 
+//including the name, health points, damage points, and win/loss record
+struct robot_stats
+{
+	string name;
+	int health{};  //make sure to add {}
+	int damage{};  //make sure to add{}
+	int wins{};    //make sure to add{}
+	int losses{};  //make sure to add{}
+};
+
+// declare and prototype three functions, one to assign stats to the two robots, one to calculate damage, 
+//and one to display the current stats of each robot.
+int set_robot_stats(robot_stats&, robot_stats&);
+int damageRoll(int);
+int stat_display(robot_stats&);
+
+/**********************************************************
+* Function Name: main()
+* Purpose: runs the program, contains calls to two other functions
+* Parameters: none
+***********************************************************/
+int main()
+{
+	//create two variables of the "robot_stats" structure type, called "computer_robot" and "player_robot"
+	robot_stats computer_robot;
+	robot_stats player_robot;
+	string key = "";  //Include to hold user input
+	//ask the user what they want to name their robot. only one word answers are accepted.
+	cout << "\tWhat do you want to name your robot? (One word only).\n\t";
+	//get the users input and store it in the 'name' member of "player_robot"
+	cin >> player_robot.name;
+	//skip down a line
+	cout << endl;
+	//call the function that generates the stats, random or otherwise, for the robots.
+	set_robot_stats(computer_robot, player_robot);
+	//create a boolian variable and initialize it to 'true'
+	bool next_game = true;
+	//while the user still wants to play,
+	//, boolean true, continue the game loop
+	while (next_game == true)
+	{
+		//at the beginning of every match, reset the robots health to 100
+		player_robot.health = 100;
+		computer_robot.health = 100;
+		//display each robots stats at the beginning of the match
+		stat_display(player_robot);
+		stat_display(computer_robot);
+		//ask the user for confirmation to continue
+		char key;
+		cout << "\tPress a key, then 'enter' to continue...\n";
+		cin >> key;
+		cout << endl;
+		//display the starting text
+		cout << "\tReady... Set... Fight!\n\n";
+		//set the attack counter to 1, this will keep track of the number of attacks
+		int attack_number = 1;
+		//while both robots health is above 100, continue the cycle of attacks/displaying stats
+		while (true)
+		{
+			//create an integer to determine which robot will attack
+			int attacker = 0;
+			//create an integer to store the amount of damage done
+			int damage_done;
+			//determine which robot will attack, based on a random number 1 or 0
+			attacker = rand() % 2;
+			//display the number of this round
+			cout << "\tAttack #" << attack_number << "\n\n";
+			//if the attacker variable comes out as '0', the players robot will attack
+			if (attacker == 0)
+			{
+				//call the function 'damageRoll' to determine how much damage is done
+				damage_done = damageRoll(player_robot.damage);
+				//subtract the damage done from the computer's robot's health
+				computer_robot.health = computer_robot.health - damage_done;
+				//tell the user which robot attacks and how much damage was done
+				cout << "\t" << player_robot.name << " attacks.\n";
+				cout << "\t" << player_robot.name << " does " << damage_done << " damage.\n\n";
+			}
+			//if the 'attacker' variable comes out as '1', the computer's robot will attack
+			if (attacker == 1)
+			{
+				//call the function 'damageRoll' to determine how much damage is done
+				damage_done = damageRoll(computer_robot.damage);
+				//subtract the damage from the player's robot's health
+				player_robot.health = player_robot.health - damage_done;
+				//tell the user which robot attacked and how much damage was done
+				cout << "\t" << computer_robot.name << " attacks.\n";
+				cout << "\t" << computer_robot.name << " does " << damage_done << " damage.\n\n";
+			}
+			//add one to the attack counter
+			attack_number = attack_number + 1;
+			//if one of the robot's health is below zero, exit the attack loop to the main game loop
+			if (player_robot.health < 0 || computer_robot.health < 0)
+				break;
+			//display both robots stats. only the health should be different
+			stat_display(player_robot);
+			stat_display(computer_robot);
+			//ask the user for confirmation to continue
+			char key;
+			cout << "\tPress a key, then 'enter' to continue...\n";
+			cin >> key;
+			cout << endl;
+		}
+		//after the attacks are finished, one robot will have 0 or less than 0 health.
+		//if the player's robot has less than 0 or 0 health, tell the user the computer's robot won.
+		if (player_robot.health <= 0)
+		{
+			cout << "\t" << computer_robot.name << " Wins!\n";
+			//add 1 to the computers win count, and 1 to the players loss count
+			computer_robot.wins = computer_robot.wins + 1;
+			player_robot.losses = player_robot.losses + 1;
+		}
+		//if the computer's robot has less than 0 or 0 health, tell the user their robot won
+		else if (computer_robot.health < 0)
+		{
+			cout << "\t" << player_robot.name << " Wins!\n";
+			//add 1 to the users win count, and 1 to the computers loss count
+			player_robot.wins = player_robot.wins + 1;
+			computer_robot.losses = computer_robot.losses + 1;
+		}
+		//create a boolian variable 'valid_entry' and set it to false
+		bool valid_entry = false;
+		//while the 'valid_entry' variable is false, repeat the loop.
+		while (valid_entry == false)
+		{
+			//ask the user if they would like to play another match
+			cout << "\tWould you like another match? (y/n)\n";
+			//using a character variable called 'choice', get the users input
+			char choice;
+			cin >> choice;
+			//if the user enters 'y', set next_game to true and valid_entry to true. this will restart the main game loop,
+			//to play another round
+			if (choice == 'y')
+			{
+				next_game = true;
+				valid_entry = true;
+			}
+			//if the user enters 'n', 
+			//set next_game to false and valid_entry to true.
+			//This will quit the program
+			else if (choice == 'n')
+			{
+				next_game = false;
+				valid_entry = true;
+				//if they choose to quit,
+				//tell them their final win/loss record
+				cout << "\n\tFinal Score:\n";
+				cout << "\tWins: " << player_robot.wins << endl;
+				cout << "\tLosses: " << player_robot.losses << endl;
+			}
+			//if the user does not enter 'y' or 'n',
+			//tell them they have an invalid entry
+			//and start the decision process over again
+			else
+			{
+				cout << "\tThat is an invalid entry.\n";
+				valid_entry = false;
+			}
+		}
+	}
+	//after the main game loop is finished,
+	//return 0 to end the program
+	// exit program gracefully
+	return 0;
+}
+
+/**********************************************************
+*Function Name: set_robot_stats
+*Purpose: to set the robots stats, inculding the randomly generated ones
+*Parameters: two, computer_robot and player_robot
+***********************************************************/
+int set_robot_stats(robot_stats& computer_robot, robot_stats& player_robot)
+{
+	//set the player's robot's win/loss record to 0/0
+	player_robot.wins = 0;
+	player_robot.losses = 0;
+	//set the computer's robots name to 'Zeus"
+	computer_robot.name = "Zeus";
+	//create a variable called seed,
+	//assign it a value using time(),
+	//and use it to seed the rand() function
+	unsigned int seed;
+	seed = time(0);
+	srand(seed);
+	//set the computer's robots win/loss record
+	//to two rnadom numbers between 1 and 9
+	computer_robot.wins = rand() % 10 + 1;
+	computer_robot.losses = rand() % 10 + 1;
+	//set the computer's robot's damage max
+	//to a number between 1 and 100
+	computer_robot.damage = rand() % 101 + 1;
+	//set the player's robot's damage max to a random
+	//number between 1 and 100
+	player_robot.damage = rand() % 101 + 1;
+	//return 0 to end the function
+	return 0;
+}
+
+/*********************************************************
+* Function Name: damageRoll
+* Purpose: to calculate the damage done with each attack
+* Parameters: one integer, which is the max damage
+* statof the attacking robot
+**********************************************************/
+int damageRoll(int damage_max)
+{
+	//create an integer variable 'seed',
+	//assign it a value with time(), and use it to seed
+	//the rand() function
+	unsigned int seed;
+	seed = time(0);
+	srand(seed);
+	//create an integer 'damage_roll',
+	//this is how much damage will be done
+	int damage_roll;
+	//using rand(), determine how much damage will be done. 
+	//this will be a number between 0 and the maximum damage of the attacking robot
+	damage_roll = rand() % (damage_max + 1);
+	//return the value of damage_roll
+	return damage_roll;
+}
+
+/*********************************************************
+*Function Name: stat_display
+*Purpose: to display the stats of the robot ,
+*in text format
+*Parameters: one, a 'robot_stat' structure
+**********************************************************/
+int stat_display(robot_stats& stats)
+{
+	//start by printing "<robot name> has:"
+	cout << "\t" << stats.name << " has:\n";
+	//if the health stat is below 0, just print 0 instead
+	if (stats.health < 0)
+		cout << "\tHealth: 0" << endl;
+	//otherwise, print "Health: <robot's health>"
+	else
+		cout << "\tHealth: " << stats.health << endl;
+	/*
+	print the other stats like this:
+	Damage: <robot's damage>
+	Wins: <robot's wins>
+	Losses: <robot's losses>
+	*/
+	cout << "\tDamage: " << stats.damage << endl;
+	cout << "\tWins: " << stats.wins << endl;
+	cout << "\tLosses: " << stats.losses << "\n\n";
+	//return 0 to end the function
+	return 0;
+}
