@@ -1,0 +1,234 @@
+/***********************************************
+ * Program Name:Assignment3_Whats_In_The_Box_Levi_McCann.cpp
+ * Created Date:9/29/2021
+ * Created By:Levi McCann
+ * Purpose: Game for "What's in the box" to see what user wins
+ * Acknowledgements:Levi McCann, Isaiah Whitten
+ ************************************************/
+#include <string>  // added but not used in program
+#include <iostream>	//added for all C++ programs
+#include <iomanip>	// Input output Manipulation
+#include <cstdlib>  //c standard library
+#include <ctime>	//c time time library 
+using namespace std;
+
+//Prototype functions 'assignBox' and 'showBoxContent'
+void assignBox(int&, int&, int&);		 //
+int showBoxContent(int, int, int, int);   //shows content in box
+
+/*********************************************************
+Function Name: main()
+Parameters: none
+Purpose: runs the program, contains calls to 2 other functions
+**********************************************************/
+int main()
+{
+	//declare three variables to represent the three boxes ie. userChoices
+	int box1, box2, box3;
+	//declare and initialize the variable for storing the users userChoice
+	int userChoice;
+	//declare and initialize a variable to use to control a while loop
+	int correctNumber = 1;
+	//call the function assignBox() to assign an 'ID', 0 or 1, to each box.
+	//only one will have an ID of 1, that one will have the miilion dollars
+	assignBox(box1, box2, box3);   //call function and pass parameters
+	//tell the user what the game is about
+	cout << "You have a user Choice of three boxes. " <<endl;
+	cout<< "One contains one million dollars, the other two contain red snappers. "<<endl;
+	cout << "Do you choose box 1, 2, or 3?\n";
+	//start a loop that runs until the user has input a valid number
+	while (correctNumber == 1)
+	{
+		//get the users input
+		cin >> userChoice;
+		//error check to number they pick is not in range, then will have user re-enter
+		if (userChoice < 1 || userChoice > 3)
+		{
+			cout << "That is not a valid option. Please try again.\n";
+		}
+		//if there are no problems with their input, end the loop by changing correctnumber to 0
+		else
+		{
+			correctNumber = 0;
+		}
+	}
+	//call the function showBoxContent() and set variable userChoice to returns value.
+	//input the users userChoice and the ID of each box as parameters
+	userChoice = showBoxContent(userChoice, box1, box2, box3);
+	//tell the user what box they chose, them tell them what they won
+	cout << "You chose box " << userChoice << ".\n";
+	//if they chose box 1, and box1's ID is 1, they won the million dollars
+	if (userChoice == 1)
+	{
+		//if box1's ID is 1, 'win 1 million dollars'
+		if (box1 == 1)
+		{
+			cout << "You've won 1 million dollars!";
+		}
+		//otherwise, 'won a red snapper'
+		else
+		{
+			cout << "You've won a red snapper!";
+		}
+	}
+	//if they chose box 2, and box2's ID is 1, they won the million dollars
+	else if (userChoice == 2)
+	{
+		//if box2's ID is 1, 'win 1 million dollars'
+		if (box2 == 1)
+		{
+			cout << "You've won 1 million dollars!";
+		}
+		//otherwise, 'won a red snapper'
+		else
+		{
+			cout << "You've won a red snapper!";
+		}
+	}
+	//if they chose box 3, and box3's ID is 1, they won the million dollars
+	else if (userChoice == 3)
+	{
+		//if box3's ID is 1, 'win 1 million dollars'
+		if (box3 == 1)
+		{
+			cout << "You've won 1 million dollars!";
+		}
+		//otherwise, 'won a red snapper'
+		else
+		{
+			cout << "You've won a red snapper!";
+		}
+	}
+	//close program and exit gracefully
+	return 0;
+};
+
+/**********************************************************
+Function name: assignBox()
+Parameters: box1, box2, box3
+Return type: void
+Purpose: assigns the number '1' to one of the boxes, showing it has the million dollars, and assigns '0' to the other two
+to show they have snappers
+**********************************************************/
+void assignBox(int& box1, int& box2, int& box3)
+{
+	//create an unisgned integer, 'seed', using the time() function
+	unsigned int seed = time(0);
+	//create a variable 'prizeNum' for Prizebox
+	int prizeNum;
+	//seed the rand() function, for greater randomness
+	srand(seed);
+	//generate a number between 1 & 3, and assign it to the prizeNum variable
+	prizeNum = 1 + (rand() % 3);
+	//if the number was 1, give box1 a value of 1, showing it has the prize; give the other two boxes values of 0
+	if (prizeNum == 1)
+	{
+		box1 = 1;
+		box2 = 0;
+		box3 = 0;
+	}
+	//if the number was 2, give box2 a value of 1, showing it has the prize; give the other two boxes values of 0
+	else if (prizeNum == 2)
+	{
+		box1 = 0;
+		box2 = 1;
+		box3 = 0;
+	}
+	//if the number was 3, give box3 a value of 1, showing it has the prize; give the other two boxes values of 0
+	else
+	{
+		box1 = 0;
+		box2 = 0;
+		box3 = 1;
+	}
+	//end of the function, no return value because it uses pass by reference to change the variables
+}
+
+/******************************************************
+Function name: showBoxContent
+Parameters: userChoice, box1, box2, box3
+Return type: int
+Purpose: shows the content of one of the boxes that the user didn't pick, which has a red snapper, and allows them to change their userChoice
+*******************************************************/
+int showBoxContent(int userChoice, int box1, int box2, int box3)
+{
+	//create an integer variable labeled ohterBox, this will be the box that is revealed
+	int otherBox = 0;
+	//create a character variable labeled changeYN, this will get the users input on whether they want to cahnge their userChoice or not
+	char changeYN;
+	//if they chose box 1, and box 2 has a snapper (as indicated by a value of '0'), set 'otherBox' to 2.
+	//otherwise, set otherBox to 3
+	if (userChoice == 1)
+	{
+		if (box2 == 0)
+		{
+			otherBox = 2;
+		}
+		else
+		{
+			otherBox = 3;
+		}
+	}
+	//if they chose box 2, and box 1 has a snapper (as indicated by a value of '0'), set 'otherBox' to 1.
+	//otherwise, set otherBox to 3
+	else if (userChoice == 2)
+	{
+		if (box1 == 0)
+		{
+			otherBox = 1;
+		}
+		else
+		{
+			otherBox = 3;
+		}
+	}
+	//if they chose box 3, and box 2 has a snapper (as indicated by a value of '0'), set 'otherBox' to 2.
+	//otherwise, set otherBox to 1
+	else if (userChoice == 3)
+	{
+		if (box2 == 0)
+		{
+			otherBox = 2;
+		}
+		else
+		{
+			otherBox = 1;
+		}
+	}
+	//tell them what box they chose, then tell them what is in the other box that was chosen.
+	//this will always be a snapper, as the box is chosen by whether or not it has a snapper.
+	//so no need for if/else statements
+	cout << "You chose box " << userChoice << ". But first, lets see what's in box " << otherBox << ".\n";
+	cout << "It's a red snapper!\n";
+	//ask if they want to change their userChoice
+	cout << "Do you want to change your userChoice? (y/n)\n";
+	//store their userChoice (either y or n) in changeYN
+	cin >> changeYN;
+	//if they choose to change their userChoice, get their new userChoice
+	if (changeYN == 'y')
+	{
+		//reset the variable correctNumber to 1
+		int correctNumber = 1;
+		//ask for their new userChoice
+		cout << "Please enter your new userChoice:\n";
+		//start a loop to repeat until it has valid input
+		while (correctNumber == 1)
+		{
+			//get their new userChoice
+			cin >> userChoice;
+			//if their userChoice is out of range, or is the same as the box that was already revealed,
+			//tell them it is invalid and return to the start of the loop
+			if (userChoice < 1 || userChoice > 3 || userChoice == otherBox)
+			{
+				cout << "That is not a valid option. Please try again.\n";
+			}
+			//otherwise, end the loop
+			else
+			{
+				correctNumber = 0;
+			}
+		}
+	}
+	//return the users userChoice, whether changed or not
+	return userChoice;
+}
