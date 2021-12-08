@@ -1,0 +1,246 @@
+/***********************************************************
+* Progam name: Assignment_7_Dice_Game_Levi_McCann.cpp 
+* Created date: 12/8/2021
+* Created by: Levi McCann
+* Purpose: CIS 61 assignment, Computer Dice Roll Game
+* Acknowledgments: Isaiah Whitten, Levi McCann, Stackoverflow.com
+* CIS61, C. Polen, Shasta College, Fall 2021
+*************************************************************/
+
+//include the necessary libraries
+#include <iostream>  //input output stream
+#include <iomanip>   //input output manipulation
+#include <string>    //String library
+#include <ctime>     //c time
+#include <cstdlib>   //c standard libray
+using namespace std;
+
+//create a class called 'Dice'. it will have two private members,
+//which hold the total score and the current roll.
+//it will also have three public member functions:
+//one to roll the die, one to print the die on the screen,
+//and one to acess
+//the private members
+class Dice
+{
+private:
+	int total_roll = 0;
+	int current_roll = 0;
+public:
+	int roll();
+	int print_roll();
+	int check()
+	{
+		return total_roll;
+	}
+};
+
+/****************************************************************
+Function Name: main()
+Purpose: runs the program, contains calls to two other functions
+Parameters: none
+*****************************************************************/
+int main()
+{
+	bool next_game = true;
+	while (next_game == true)
+	{
+		//create two objects of the 'Dice' class,
+		//one for the player and one for the computer
+		Dice player_dice;
+		Dice computer_dice;
+		//explain the game to the player
+		cout << "You are going to play a game of dice against the computer.\n"
+			<< "Each of you will roll two dice six times. Ready?\n\n";
+		//start a 'for' loop that will repeat six times
+		for (int count = 0; count < 6; count++)
+		{
+			//if the loop is on the second or higher repeat, display the current scores and state who's winning
+			if (count > 0)
+			{
+				//using the 'check' function,
+				//compare the total_roll of each player
+				//if the player's score is higher,
+				//tell them they are ahead
+				if (player_dice.check() > computer_dice.check())
+				{
+					cout << "Right now, you're ahead!\n\n";
+				}
+				//if the computer's score is higher,
+				//tell the player the computer is ahead
+				else if (player_dice.check() < computer_dice.check())
+				{
+					cout << "Right now, the computer's ahead!\n\n";
+				}
+				//print the current score on the screen
+				cout << "Score:\nPlayer: " << player_dice.check() << ", Computer: " << computer_dice.check() << endl << endl;
+			}
+			//have the user hit a key to continue
+			char key;
+			cout << "Press any key then hit enter to continue...\n";
+			cin >> key;
+			cout << endl;
+			//tell the user it's their roll
+			cout << "It's your roll!\n\n";
+			//roll for the player, and print the results
+			player_dice.roll();
+			//tell the user it's the computers turn, and ask for confirmation to continue
+			cout << "Now it's the computers roll!\n";
+			cout << "Press any key then hit enter to continue...\n";
+			cin >> key;
+			cout << endl;
+			//roll for the computer and print the results
+			computer_dice.roll();
+		}
+		//after the six rolls are over,
+		//compare the final scores of the player and computer
+		//if the players total score is higher,
+		//congratulate them on winning
+		if (player_dice.check() > computer_dice.check())
+		{
+			cout << "Good job, you won!\n";
+		}
+		//if the computers total score is higher,
+		//tell the player they didn't win
+		if (player_dice.check() < computer_dice.check())
+		{
+			cout << "Too bad, the computer won.\n";
+		}
+		//print the final score
+		cout << "Final Score:\nPlayer: " << player_dice.check() << ", Computer: " << computer_dice.check() << endl;
+		//create a boolian variable 'valid_entry'
+		//and set it to false
+		bool valid_entry = false;
+		//while the 'valid_entry' variable is false,
+		//repeat the loop.
+		while (valid_entry == false)
+		{
+			//ask the user if they would like to play another game
+			cout << "Would you like to play another game? (y/n)\n";
+			//using a character variable called 'choice',
+			//get the users input
+			char choice;
+			cin >> choice;
+			//if the user enters 'y',
+			//set next_game to true and valid_entry to true.
+			//this will restart the main game loop,
+			//to play another round
+			if (choice == 'y')
+			{
+				next_game = true;
+				valid_entry = true;
+			}
+			//if the user enters 'n',
+			//set next_game to false and valid_entry to
+			//true. this will quit the program
+			else if (choice == 'n')
+			{
+				next_game = false;
+				valid_entry = true;
+			}
+			//if the user does not enter 'y' or 'n',
+			//tell them they have an invalid entry
+			//and start the decision process over again
+			else
+			{
+				cout << "That is an invalid entry.\n";
+				valid_entry = false;
+			}
+			//clear the screen
+			system("cls");
+		}
+	}
+	//return 0 to end the program
+	return 0;
+}
+
+/*********************************************************
+* Function name: roll(), a member function of 'Dice'
+* Purpose: obtains a random number between 1 and six,
+* simulating the roll of a die. conatins calls to one
+* other function
+* Parameters: none
+**********************************************************/
+int Dice::roll()
+{
+	//create an int 'seed' and assign it a value
+	//with the time() function
+	int seed;
+	seed = time(0);
+	//seed the rand() function with 'seed'
+	srand(seed);
+	//start a 'for' loop which will repeat twice
+	for (int count = 0; count < 2; count++)
+	{
+		//get a random number between one and six
+		//(to simulate a die) and assign it to
+		//current_roll
+		current_roll = rand() % 6 + 1;
+		//add the roll to the total score
+		total_roll = total_roll + current_roll;
+		//call print_roll to print the die
+		print_roll();
+	}
+	return 0;
+}
+
+/*******************************************************
+* Function Name: print_roll(), a member function of 'Dice'
+* Purpose: prints the die on the screen after every roll
+* Parameters: none
+********************************************************/
+int Dice::print_roll()
+{
+	//print the die face according to the results
+	//of roll()
+	if (current_roll == 1)
+	{
+		cout << " ----- \n"
+			<< "|     |\n"
+			<< "|  0  |\n"
+			<< "|     |\n"
+			<< " -----\n";
+	}
+	else if (current_roll == 2)
+	{
+		cout << " ----- \n"
+			<< "|  0  |\n"
+			<< "|     |\n"
+			<< "|  0  |\n"
+			<< " -----\n";
+	}
+	else if (current_roll == 3)
+	{
+		cout << " ----- \n"
+			<< "|0    |\n"
+			<< "|  0  |\n"
+			<< "|    0|\n"
+			<< " -----\n";
+	}
+	else if (current_roll == 4)
+	{
+		cout << " ----- \n"
+			<< "| 0 0 |\n"
+			<< "|     |\n"
+			<< "| 0 0 |\n"
+			<< " -----\n";
+	}
+	else if (current_roll == 5)
+	{
+		cout << " ----- \n"
+			<< "| 0 0 |\n"
+			<< "|  0  |\n"
+			<< "| 0 0 |\n"
+			<< " -----\n";
+	}
+	else if (current_roll == 6)
+	{
+		cout << " ----- \n"
+			<< "| 0 0 |\n"
+			<< "| 0 0 |\n"
+			<< "| 0 0 |\n"
+			<< " -----\n";
+	}
+	cout << endl;
+	return 0;
+}
