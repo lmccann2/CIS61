@@ -1,0 +1,138 @@
+*******************************************
+ * Program Name:Assignment4_Guess_The_Mystery_Word_Levi_McCann.cpp
+ * Created Date:10/17/2021
+ * Created By:Levi McCann
+ * Purpose:Guess the Mystery Word Game, Assignment 4, CIS61
+ * Acknowledgements: Isaiah Whitten, Levi McCannn
+ *******************************************/
+#include <iostream>
+#include <string>   // added for string and char variables
+#include <iomanip>  //Input Output manipulation
+#include <ctime>    // C Time
+#include <cstdlib>  //C Standard library
+using namespace std;
+
+//prototype and declare functions 'getWord' && 'printCorrectLetters'
+string getWord();
+int printCorrectLetters(string, char, char, char);
+
+/***************************************************************
+Function Name: main()
+Purpose: runs the program, contains calls to two other functions
+Parameters: none
+****************************************************************/
+int main()
+{
+	//declare and initialize a string variable 'mysteryWord'
+	string mysteryWord = "test";
+	//print the welcome statement explaining the game
+	cout << "Welcome to the Mystery Word Guessing Game! Here's how to play:" << endl;
+	cout << "You will guess three letters. Any letters you chose that are in the mystery word will appear." << endl;
+	cout << "You will then have two chances to guess the word. Are you ready?" << endl << endl;
+	//call the function getWord() and assign the return value to mysteryWord
+	mysteryWord = getWord();
+	//declare three char variables to for user
+	char letOne, letTwo, letThree;
+	//ask the user for the first, second, and third letters, then store them in the respective variable
+	cout << "Please enter letter #1\n";
+	cin >> letOne;
+	cout << "Please enter letter #2\n";
+	cin >> letTwo;
+	cout << "Please enter letter #3\n";
+	cin >> letThree;
+	//call the function printCorrectLetters()
+	printCorrectLetters(mysteryWord, letOne, letTwo, letThree);
+	//print line
+	cout << endl;
+	//ask the user for their first guess
+	cout << "What is your first guess for the word?" << endl;
+	//initialize a string variable for their guess
+	string guess;
+	//get the users input
+	cin >> guess;
+	//if they guessed correctly, congratulate them
+	if (guess == mysteryWord)
+		cout << "You guessed it! Great job!" <<endl <<endl;  //added 2 lines at EOP
+	else
+	{
+		//if they didn't guess correctly, tell them so
+		cout << "That wasn't it." << endl  <<endl;  //Added 2 lines for spacing
+		//ask them for their second guess
+		cout << "What is your second, and final, guess?" << endl <<endl;  //added 2 lines for spacing
+		//get their second guess
+		cin >> guess;
+		//if they are right, congratulate them
+		if (guess == mysteryWord)
+			cout << "You guessed it! Great job! That was close, though." <<endl  <<endl;  //added 2 lines at EOP
+		else
+		{
+			//if they are wrong, tell them so and tell them what the mystery word was
+			cout << "Nice try, but you didn't get it. Better luck next time." << endl;
+			cout << "The mystery word was: " << mysteryWord  <<endl <<endl;  //added two lines at EOP
+		}
+	}
+	//end program and exit gracefully
+	return 0;
+}
+
+/*********************************************************
+Function Name: getWord()
+Purpose: select, from an array of words, the mystery word
+Parameters: none
+*********************************************************/
+string getWord()
+{
+	//declare and fill an array with 10 strings
+	string mysteryWords[10] = { "unicorn", "zebra", "dictionary", "warning", "surround",
+								"fragile", "wary", "permit", "include", "snotty" };
+	//initialize integer variable 'wordNum', stores number of the mystery word
+	int wordNum;
+	//seed the rand() function with a variable 'seed', that is taken from the time() function
+	unsigned int seed = time(0);
+	srand(seed);
+	//select a random number between one and ten and store it in 'wordNum'
+	wordNum = 1 + (rand() % 10);
+	//initialize a string to hold the mystery word
+	string mysteryWord;
+	//select the word from the array that is referenced by 'wordNum', and store it in 'word'
+	mysteryWord = mysteryWords[wordNum];
+	return mysteryWord;
+}
+
+/***************************************************************
+Function Name: printCorrectLetters()
+Purpose: determine which letters, if any, that the user selected are in the mystery word
+Parameters: mysteryWord, letOne, letTwo, letThree
+****************************************************************/
+int printCorrectLetters(string word, char letOne, char letTwo, char letThree)
+{
+	//make a variable mysteryWord to hold the parameter 'word'
+	string mysteryWord = word;
+	//initialize a variable that is equal to the number of letters in 'mysteryWord'
+	int numOfLetters = mysteryWord.length();  
+	//initialize 'count'
+	int count;
+	//initialize a char variable 'letters'
+	char letter;
+	//tell the users what letters they got
+	cout << "Here are the letters you got right:\n";
+	//start a loop that repeats for every letter in 'mysteryWord'
+	for (count = 0; count <= numOfLetters - 1; count++)
+	{
+		//get the letter in 'mysteryWord' that corresponds to the count
+		letter = mysteryWord.at(count);
+		//if the letter is the same as one of the users letters, print it
+		if (letter == letOne)
+			cout << letOne;
+		else if (letter == letTwo)
+			cout << letTwo;
+		else if (letter == letThree)
+			cout << letThree;
+		//otherwise, print an underscore
+		else
+			cout << "_";
+	}
+	//skip a line and return 0
+	cout << endl;
+	return 0;
+}
