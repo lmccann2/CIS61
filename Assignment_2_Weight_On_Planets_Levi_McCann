@@ -1,0 +1,63 @@
+/*******************************************************************************
+ * Program Name: Programming Assignment 1: Weight on planets
+ * Created Date:9/1/2021
+ * Created By:Levi McCann
+ * Purpose:Calculate users weight on different planets.
+ * Acknowledgements:
+ *******************************************************************************/
+
+#include <iostream>  //Input output stream
+#include <iomanip>   // Input output manipulation
+using namespace std;
+
+/*******************************************************************************
+ * Function Name: main()
+ * Parameters: None
+ * Return Value: int
+ * Purpose: calculate weight on different planets
+ *******************************************************************************/
+int main()
+{
+	//Enter Constants for planets gravity
+		const double MERCURY = .38;
+		const double VENUS = .91;
+		const double EARTH = 1.00;
+		const double MARS = .38;
+		const double JUPITER = 2.34;
+		const double SATURN = 1.06;
+		const double URANUS = .92;
+		const double NEPTUNE = 1.19;
+		const double PLUTO = .06;
+		const double MOON = .166;
+		const double SUN = 27.0;
+
+	//Variable for user to enter weight.
+	double weight = 0.0;
+
+	//Header for program
+	cout << setw(10) <<"WHAT IS YOUR BODY WEIGHT ON OTHER PLANETS?" << endl;
+	//ask user for weight
+	cout << setw(20) << "What is your current weight in lbs? ";
+	//get weight
+	cin >>weight;
+	
+
+	//display user weights on other planets and print output formatted.
+	//Set width spacing to 10 befor cout statements
+	//cout << setw(10);
+	cout << setw(30) << "Mercury = " << weight * MERCURY << " lbs." << endl;
+	cout << setw(30) << "Venus = " << weight * VENUS <<" lbs." <<endl;
+	cout << setw(30) << "Earth = " << weight * EARTH <<" lbs."<< endl;
+	cout << setw(30) << "Mars = " << weight * MARS <<" lbs." << endl;
+	cout << setw(30) << "Jupiter = " << weight * JUPITER <<" lbs." << endl;
+	cout << setw(30) << "Saturn = " << weight * SATURN <<" lbs."<< endl;
+	cout << setw(30) << "Uranus = " << weight * URANUS <<" lbs."<< endl;
+	cout << setw(30) << "Neptune = " << weight * NEPTUNE <<" lbs."<< endl;
+	cout << setw(30) << "Pluto = " << weight * PLUTO <<" lbs."<< endl;
+	cout << setw(30) << "Moon = " << weight * MOON <<" lbs."<< endl;
+	cout << setw(30) << "Sun = " << weight * SUN << " lbs."<<endl;
+
+	
+	//end program and exit gracefully
+	return 0;
+}
