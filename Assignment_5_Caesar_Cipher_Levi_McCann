@@ -1,0 +1,224 @@
+/*****************************************************
+* Progam name: Assignment_5_Levi_McCann.cpp
+* Created date: 11/20/2021
+* Created by: Levi McCann
+* Purpose: CIS 61 assignment, Caser Cipher
+* Acknowledgments: Isaiah Whitten, Levi McCann
+******************************************************/
+
+//include libraries needed
+#include <iostream> //input output stream
+#include <iomanip>  //input output manipulation
+#include <string>   //String library
+using namespace std;
+
+//initialize and protoype three functions to encode, decode, and get the users choice
+int choice();
+int encode();
+int decode();
+
+/********************************************************
+* Function Name: main()
+* Purpose: runs the program
+* Parameters: none
+*********************************************************/
+int main()
+{
+	//initialize an int variable to the value of 0
+	int decision = 0;
+	//start a general while loop. no conditions, 'break' will be used to quit.
+	while (true)
+	{
+		//print the welcome statement
+		cout << "Welcome to the Caeser Cipher Machine!\n";
+		//call the 'choice' function and assign the output to the 'decision' variable
+		decision = choice();
+		//if decision = 1, call the 'encode' function
+		if (decision == 1)
+		{
+			encode();
+		}
+		//if decision = 2, call the 'decode' function
+		else if (decision == 2)
+		{
+			decode();
+		}
+		//if decision = 3, clear the screen, print "Thank you" and break the loop
+		else
+		{
+			system("cls");  //clear screen
+			cout << "Thank you!";
+			break;
+		}
+		//initialize a string variable 'decsision2'
+		string decision2;
+		//start a loop to get and test the users input
+		while (true)
+		{
+			//ask the user if they would like to repeat the process
+			cout << "Would you like to encode/decode another message? (yes/no)\n";
+			//get the users input
+			cin >> decision2;
+			//check the users input, if valid, continue the program, in not, ask for another try
+			if (decision2 == "yes" || decision2 == "no")
+				break;
+			else
+			{
+				cout << "That is not a valid response. Please try again.";
+				continue;
+			}
+		}
+		//if they decide not to continue, clear the screen, print "Thank you" and break the loop.
+		if (decision2 == "No" || decision2 == "no")
+		{
+			system("cls");
+			cout << "Thank you!";
+			break;
+		}
+		//at the end of the loop, clear the screen
+		system("cls");
+	}
+	//return 0 to end the program and exit gracefully
+	return 0;
+}
+
+/**********************************************************
+* Function Name: choice()
+* Purpose: gets & returns the users choice
+* Parameters: none
+***********************************************************/
+int choice()
+{
+	//initialize a string variable 'decision'
+	string decision;
+	//start a loop to get and test the users input
+	while (true)
+	{
+		//ask the user what they would like to do
+		cout << "Would you like to encode, decode, or quit?\n";
+		cout << "Please enter your choice: ";
+		//put the users input into the 'decision' variable
+		cin >> decision;
+		//if the input is valid, continue with the program, if not, repeat the loop
+		if (decision == "encode" || decision == "decode" || decision == "quit")
+		{
+			break;
+		}
+		else
+			cout << "That is not a valid response. Please try again.";
+		continue;
+	}
+	//depending on the users input, return one of three values
+	if (decision == "encode")
+		return 1;
+	else if (decision == "decode")
+		return 2;
+	else if (decision == "quit")
+		return 3;
+}
+
+/**********************************************************************
+* Function Name: encode()
+* Purpose: encodes a string given by the user, based on a shift parameter given by the user.
+* Parameters: none
+***********************************************************************/
+int encode()
+{
+	//initialize a string variable 'message'
+	string message;
+	//initialize three int variables 'shift', 'length', and 'counter'
+	int shift;
+	int length;
+	int counter;
+	//ask the user for a message to encode
+	cout << "Please enter a message you would like to encode (lowercase only, please):\n";
+	//get their input, using cin.ignore and getline to get a whole line of input
+	cin.ignore();
+	getline(cin, message);
+	//ask the user for a shift value
+	cout << "Please enter the shift:\n ";
+	//get the users input
+	cin >> shift;
+	//find the length of the message
+	length = message.length();
+	//print "Here is your encoded message"
+	cout << "Here is your encoded message:\n";
+	//'for' loop to repeat for all the characters in the message
+	for (counter = 0; counter <= length - 1; counter++)
+	{
+		//find the character at the place in the message corresponding the the iteration of the loop
+		char letter = message.at(counter);
+		//if the character is a punctuation mark, space, or digit, simply print it as-is
+		if (ispunct(letter) || isspace(letter) || isdigit(letter))
+			cout << letter;
+		//if the letter is less than z after being shifted, print the letter plus the shift
+		else if (letter + shift <= 'z')
+		{
+			char newletter = letter + shift;
+			cout << newletter;
+		}
+		//if the letter would be more than z after being shifted, print the correct wraparound
+		else
+		{
+			char newletter = 'a' + (letter + shift - 'z' - 1);
+			cout << newletter;
+		}
+	}
+	//progress to a new line and end the function
+	cout << endl;
+	cout << endl;
+	return 0;
+}
+
+/**********************************************************
+* Function Name: decode()
+* Purpose: decodes a string given by the user using a shift provided by them
+* Parameters: none
+************************************************************/
+int decode()
+{
+	//create a string variable 'message'
+	string message;
+	//create three int variables 'shift', 'length', and 'counter'
+	int shift;
+	int length;
+	int counter;
+	//ask the users for a message to decode
+	cout << "Please enter a message you would like to decode (lowercase only, please):\n";
+	//get their input, using cin.ignore and getline to get a whole line of input
+	cin.ignore();  // get user enter info
+	getline(cin, message);
+	//ask them for the shift amount (this is more important here than in encoding)
+	cout << "Please enter the shift:\n";
+	//get the shift
+	cin >> shift;
+	//find the length of the message
+	length = message.length();
+	//have them the decoded message
+	cout << "Here is your decoded message:\n";
+	//'for' loop that will repeat for every character in the message
+	for (counter = 0; counter <= length - 1; counter++)
+	{
+		//assign a character varibale to the current letter of the message
+		char letter = message.at(counter);
+		//if the character is a punctuation mark, whitespace, or a digit, print it as-is
+		if (ispunct(letter) || isspace(letter) || isdigit(letter))
+			cout << letter;
+		//if the letter, minus the shift, is greater than 'a', print the shifted letter
+		else if (letter - shift >= 'a')
+		{
+			char newletter = letter - shift;
+			cout << newletter;
+		}
+		//if the letter minus the shift is less than 'a', find the value it 'wraps' to and print it
+		else
+		{
+			char newletter = 'z' - (letter- ('a' - letter - shift) - 1); //creates shift letter
+			cout << newletter;
+		}
+	}
+	//skip down a line and end the function
+	cout << endl;
+	cout << endl;
+	return 0;
+}
