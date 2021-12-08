@@ -1,0 +1,108 @@
+/*******************************************************************************
+ * Program Name: Assignment2_Number_Guessing_Game_Levi_McCann
+ * Created Date: 9/11/2021
+ * Created By: Levi McCann
+ * Purpose: Number Random Number Guessing Game. Gives user 5 guesses.
+ *          CIS 61, Cayden Polen, Shasta College
+ * College, Fall 2021.
+ * Acknowledgements: Levi McCann
+ *******************************************************************************/
+
+#include <string>  //added but not needed in program
+#include <iomanip>
+#include <cstdlib>
+#include <ctime> 
+#include <iostream>
+using namespace std;
+
+/*******************************************************************************
+ * Function Name: main()
+ * Parameters: None
+ * Return Value: int
+ * Purpose: Main part of Number Guessing Game
+ *******************************************************************************/
+int main()
+{
+    //initialize and declare variables
+    int randNum;  //computer generated random number
+    int useNum;  //user entered number
+    bool win = false; //boolean to determine winner turns to true if winner
+    
+    int guesses = 5; // number of user guesses initialize to 5 (gives user 5 guesses exits after 1)
+    //seed number of random number
+    unsigned seed = time(0);
+    //generate random number
+    srand(seed);  //seeded random number
+    randNum = 1 + rand() % 100;  // computer random number 1-100
+    //
+    //format number game setw
+    cout << setw(30) << fixed<< "Number Guessing Game: \n";
+    cout << setw(5) <<fixed <<"I am thinking of a number. Can you guess the number? (Between 1 - 100)  \n";
+    cout << setw(16) <<fixed <<"You have " << guesses << " guess(es) left:  \n";
+    cout << endl;
+    cin >> useNum;  //user entered number
+    cout << endl;
+
+   
+    //loop to determine if user is winner
+        while (!win && guesses >= 1)
+        {
+            if (useNum > 100)
+            {
+              
+                    cout << "The number: " << useNum << " you entered is out of Range. Please re-enter a number: \n";
+                    cin >> useNum;
+                    guesses = guesses + 1;  // adds one to guesses counter so user does not use a guess
+                
+            }
+            if (useNum < randNum) // guess too low
+            {
+                cout << "Too Low. Try again. " << endl;
+                guesses = guesses - 1; //decrement guesses
+                cout << "You have " << guesses << " guess(es) left. \n";
+                cin >> useNum;
+                
+                
+                //print the computer guess on last turn
+                    if (guesses <= 1)
+                    {
+                    cout << "The number the computer chose was " << randNum << endl;
+                    break;
+                    }
+
+            }
+            else if (useNum > randNum) //too high
+            {
+                cout << "Too High. Try again." << endl;
+                guesses = guesses - 1; //decrement guesses
+                cout << "You have " << guesses << " guess(es) left. \n";
+                cin >> useNum;
+                //Print computers guess on last turn
+                    if (guesses <= 1)
+                    {
+                    cout << "The number the computer chose was " << randNum << endl;
+                    break;
+                    }
+            }
+            else //user wins aka winner
+            {
+                if (guesses >= 5) //winner wins on first guess
+                {
+                
+                    //user wins on first guess
+                    cout << "You WIN on your first guess! Good Job!" << endl;
+                    win = true;
+                }
+                else
+                {
+                    //user wins on any other guess
+                    cout << "You WIN! Good Job!" << endl;
+                    win = true;
+
+                }
+            }
+        }
+
+    //close program and exit gracefully
+    return 0;
+}
